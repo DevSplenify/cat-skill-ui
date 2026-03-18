@@ -53,15 +53,14 @@ const StatusBadge = ({ status }: { status: 'Harvested' | 'Scheduled' }) => {
 
 const ViewDetailsBtn = () => (
   <button
-    className="flex items-center gap-2 px-4 py-1 rounded-full text-sm font-medium transition-colors"
+    className="flex items-center justify-center gap-1.5 px-2 md:px-4 py-1 rounded-full text-xs md:text-sm font-medium transition-colors whitespace-nowrap"
     style={{ border: '1px solid #D1D0D2', color: '#1A1A1A', background: '#F0F0F0' }}
   >
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M2.72647 12.7461C2.0182 11.8259 1.66406 11.3658 1.66406 9.99967C1.66406 8.63353 2.0182 8.17345 2.72647 7.25328C4.1407 5.41597 6.51249 3.33301 9.9974 3.33301C13.4823 3.33301 15.8541 5.41597 17.2683 7.25328C17.9766 8.17345 18.3307 8.63353 18.3307 9.99967C18.3307 11.3658 17.9766 11.8259 17.2683 12.7461C15.8541 14.5834 13.4823 16.6663 9.9974 16.6663C6.51249 16.6663 4.1407 14.5834 2.72647 12.7461Z" stroke="#69686D" stroke-width="1.5" />
-      <path d="M12.5 10C12.5 11.3807 11.3807 12.5 10 12.5C8.61929 12.5 7.5 11.3807 7.5 10C7.5 8.61929 8.61929 7.5 10 7.5C11.3807 7.5 12.5 8.61929 12.5 10Z" stroke="#171A26" stroke-width="1.5" />
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2.72647 12.7461C2.0182 11.8259 1.66406 11.3658 1.66406 9.99967C1.66406 8.63353 2.0182 8.17345 2.72647 7.25328C4.1407 5.41597 6.51249 3.33301 9.9974 3.33301C13.4823 3.33301 15.8541 5.41597 17.2683 7.25328C17.9766 8.17345 18.3307 8.63353 18.3307 9.99967C18.3307 11.3658 17.9766 11.8259 17.2683 12.7461C15.8541 14.5834 13.4823 16.6663 9.9974 16.6663C6.51249 16.6663 4.1407 14.5834 2.72647 12.7461Z" stroke="#69686D" strokeWidth="1.5"/>
+      <path d="M12.5 10C12.5 11.3807 11.3807 12.5 10 12.5C8.61929 12.5 7.5 11.3807 7.5 10C7.5 8.61929 8.61929 7.5 10 7.5C11.3807 7.5 12.5 8.61929 12.5 10Z" stroke="#171A26" strokeWidth="1.5"/>
     </svg>
-
-    View Details
+    <span className="hidden sm:inline">View Details</span>
   </button>
 )
 
