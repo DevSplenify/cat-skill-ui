@@ -15,8 +15,8 @@ export default function Navbar() {
         <input
           type="text"
           placeholder="Search..."
-          className="w-full pl-10 pr-14 py-2 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 placeholder:text-[#69686D]"
-          style={{ background: 'transparent', border: '2px solid #E8E8E9', color: '#69686D' }}
+          className="w-full pl-10 pr-14 py-2 rounded-xl text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 placeholder:text-[#69686D]"
+          style={{ background: 'transparent', border: '1px solid #E8E8E9', color: '#69686D' }}
         />
         <span className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center">
           <svg width="28" height="11" viewBox="0 0 28 11" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -28,7 +28,7 @@ export default function Navbar() {
       <div className="flex-1" />
 
       {/* User pill */}
-      <div className="flex items-center gap-2.5 px-4 py-2 rounded-full cursor-pointer hover:bg-gray-50 transition-colors" style={{ border: '2px solid #E8E8E9', background: 'white' }}>
+      <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors" style={{ border: '1px solid #E8E8E9', background: 'white' }}>
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
           <g clipPath="url(#clip0_327_98244)">
             <circle cx="9.9974" cy="4.99984" r="3.33333" stroke="#171A26" strokeWidth="1.5"/>

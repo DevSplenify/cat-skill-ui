@@ -11,7 +11,9 @@ export default function AppLayout() {
           <Navbar />
         </div>
         <main className="flex-1 overflow-y-auto p-3 md:p-6 bg-white">
-          <Outlet />
+          <div className="max-w-8xl mx-auto w-full">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>

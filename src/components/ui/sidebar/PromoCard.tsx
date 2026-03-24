@@ -1,7 +1,7 @@
 export default function PromoCard() {
   return (
     <div className="rounded-2xl bg-primary p-4 text-white mx-3 mb-6">
-      <p className="text-sm font-semibold leading-snug mb-4">
+      <p className="text-sm font-medium leading-snug mb-4">
         Streamline your Catskill process here easily
       </p>
       <button

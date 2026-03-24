@@ -40,6 +40,7 @@
 @theme {
   --color-primary: #537F68;
   --font-sans: 'Aeonik', sans-serif;
+  --container-8xl: 100rem;
 }
 
 * {

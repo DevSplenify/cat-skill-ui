@@ -12,14 +12,14 @@ export default function DashboardHeader() {
           </svg>
         </div>
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Dashboard</h2>
+          <h2 className="text-xl font-medium text-gray-900">Dashboard</h2>
           <p className="text-xs text-gray-400">View and manage your dashboard details here</p>
         </div>
       </div>
 
       {/* Desktop */}
       <div className="hidden md:block mb-6">
-        <h2 className="text-xl font-semibold text-gray-900">Dashboard</h2>
+        <h2 className="text-xl font-medium text-gray-900">Dashboard</h2>
         <p className="text-sm text-gray-500 mt-1">View and manage your dashboard details here</p>
       </div>
     </>
