@@ -1,9 +1,11 @@
 interface Props {
   onCancel: () => void
   onOkay: () => void
+  title?: string
+  message?: string
 }
 
-export default function SuccessModal({ onCancel, onOkay }: Props) {
+export default function SuccessModal({ onCancel, onOkay, title = 'Verified Successfully !', message = 'Your account is verified as \u201cShimiel Juan\u201d , you can view your details in your account' }: Props) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
       <div className="bg-white rounded-2xl w-full max-w-md px-4 py-4 flex flex-col items-center text-center shadow-xl">
@@ -20,10 +22,8 @@ export default function SuccessModal({ onCancel, onOkay }: Props) {
           </defs>
         </svg>
 
-        <h2 className="text-lg font-semibold text-[#171A26] mb-3">Verified Successfully !</h2>
-        <p className="text-sm text-[#69686D] mb-8 leading-relaxed">
-          Your account is verified as &ldquo;Shimiel Juan&rdquo; , you can view your details in your account
-        </p>
+        <h2 className="text-lg font-semibold text-[#171A26] mb-3">{title}</h2>
+        <p className="text-sm text-[#69686D] mb-8 leading-relaxed">{message}</p>
 
         <div className="flex justify-between w-full">
           <button

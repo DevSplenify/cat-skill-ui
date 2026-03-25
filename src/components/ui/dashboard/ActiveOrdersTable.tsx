@@ -101,22 +101,24 @@ export default function ActiveOrdersTable() {
   return (
     <div className="mt-6 rounded-2xl" style={{ border: '1px solid #E8E8E9', background: 'white', overflow: 'hidden' }}>
       {/* Header */}
-      <div className="flex items-center justify-between px-5 py-4 flex-wrap gap-3">
-        <div>
-          <p className="font-semibold text-[#171A26]" style={{ fontSize: '16px' }}>Active Orders</p>
-          <p className="text-sm mt-0.5" style={{ color: '#69686D' }}>List of active jobs are here</p>
-        </div>
-        <div className="flex items-center gap-2 flex-wrap">
-          <div className="flex items-center gap-2 px-3 py-2 rounded-lg" style={{ border: '1px solid #E8E8E9' }}>
-            <input type="text" placeholder="Search here" className="text-sm outline-none bg-transparent w-36" style={{ color: '#1A1A1A' }} />
-            <SearchIcon />
+      <div className="px-4 sm:px-5 py-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div className="shrink-0">
+            <p className="font-semibold text-[#171A26]" style={{ fontSize: '16px' }}>Active Orders</p>
+            <p className="text-sm mt-0.5" style={{ color: '#69686D' }}>List of active jobs are here</p>
           </div>
-          <button className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm" style={{ border: '1px solid #E8E8E9', color: '#1A1A1A' }}>
-            All Species <ChevronDown />
-          </button>
-          <button className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm" style={{ border: '1px solid #E8E8E9', color: '#1A1A1A' }}>
-            All Statuses <ChevronDown />
-          </button>
+          <div className="flex items-center gap-2 overflow-x-auto pb-0.5 sm:pb-0">
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg shrink-0" style={{ border: '1px solid #E8E8E9' }}>
+              <input type="text" placeholder="Search here" className="text-sm outline-none bg-transparent w-28" style={{ color: '#1A1A1A' }} />
+              <SearchIcon />
+            </div>
+            <button className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm shrink-0 whitespace-nowrap" style={{ border: '1px solid #E8E8E9', color: '#1A1A1A' }}>
+              All Species <ChevronDown />
+            </button>
+            <button className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm shrink-0 whitespace-nowrap" style={{ border: '1px solid #E8E8E9', color: '#1A1A1A' }}>
+              All Statuses <ChevronDown />
+            </button>
+          </div>
         </div>
       </div>
 
