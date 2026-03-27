@@ -4,6 +4,8 @@ import AppLayout from './layouts/AppLayout.tsx'
 import Dashboard from './pages/Dashboard.tsx'
 import Availability from './pages/Availability.tsx'
 import MyBookings from './pages/MyBookings.tsx'
+import SupportAndNews from './pages/SupportAndNews.tsx'
+import Settings from './pages/Settings.tsx'
 
 const router = createBrowserRouter([
   // Auth routes
@@ -17,8 +19,8 @@ const router = createBrowserRouter([
       { path: '/scheduling', element: <Availability />, handle: { title: 'Scheduling' } },
       { path: '/bookings', element: <MyBookings />, handle: { title: 'My Bookings' } },
       { path: '/messages', element: <Dashboard />, handle: { title: 'Messages' } },
-      { path: '/settings', element: <Dashboard />, handle: { title: 'Settings' } },
-      { path: '/support', element: <Dashboard />, handle: { title: 'Support & News' } },
+      { path: '/settings', element: <Settings />, handle: { title: 'Settings' } },
+      { path: '/support', element: <SupportAndNews />, handle: { title: 'Support & News' } },
     ],
   },
 
