@@ -12,9 +12,17 @@ interface AvailabilityTabsProps {
   onHideRequestForm: () => void
 }
 
+const getTodayString = () => new Date().toISOString().split('T')[0]
+
 export default function AvailabilityTabs({ showRequestForm, onShowRequestForm, onHideRequestForm }: AvailabilityTabsProps) {
   const [tab, setTab] = useState<Tab>('Availability')
   const [events, setEvents] = useState<CalendarEvent[]>([])
+
+  // Screen 1 Selection State
+  const [specie, setSpecie] = useState('Beef')
+  const [numberOfAnimals, setNumberOfAnimals] = useState(1)
+  const [inspectionLevel, setInspectionLevel] = useState('Standard')
+  const [selectedDate, setSelectedDate] = useState(getTodayString())
 
   const handleAddToCalendar = () => {
     const today = new Date()
@@ -32,7 +40,16 @@ export default function AvailabilityTabs({ showRequestForm, onShowRequestForm, o
   }
 
   if (showRequestForm) {
-    return <RequestAnimalForm onBack={onHideRequestForm} onAddToCalendar={handleAddToCalendar} />
+    return (
+      <RequestAnimalForm
+        specie={specie}
+        numberOfAnimals={numberOfAnimals}
+        inspectionLevel={inspectionLevel}
+        dropoffDate={selectedDate}
+        onBack={onHideRequestForm}
+        onAddToCalendar={handleAddToCalendar}
+      />
+    )
   }
 
   return (
@@ -60,8 +77,19 @@ export default function AvailabilityTabs({ showRequestForm, onShowRequestForm, o
       {/* Tab content */}
       {tab === 'Availability' && (
         <div className="flex flex-col gap-5">
-          <AvailabilityFilters onRequestAnimal={onShowRequestForm} />
-          <AvailabilityCalendar />
+          <AvailabilityFilters
+            specie={specie}
+            onSpecieChange={setSpecie}
+            numberOfAnimals={numberOfAnimals}
+            onAnimalsChange={setNumberOfAnimals}
+            inspectionLevel={inspectionLevel}
+            onInspectionChange={setInspectionLevel}
+            onRequestAnimal={onShowRequestForm}
+          />
+          <AvailabilityCalendar
+            selectedDate={selectedDate}
+            onDateSelect={setSelectedDate}
+          />
         </div>
       )}
       {tab === 'My Calendar' && (
@@ -70,3 +98,4 @@ export default function AvailabilityTabs({ showRequestForm, onShowRequestForm, o
     </div>
   )
 }
+

@@ -26,15 +26,28 @@ function getFirstDayOfMonth(year: number, month: number) {
 
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December']
 
-export default function AvailabilityCalendar() {
+interface AvailabilityCalendarProps {
+  selectedDate?: string
+  onDateSelect?: (dateStr: string) => void
+}
+
+export default function AvailabilityCalendar({ selectedDate, onDateSelect }: AvailabilityCalendarProps = {}) {
   const today = new Date()
   const [year, setYear] = useState(today.getFullYear())
   const [month, setMonth] = useState(today.getMonth())
-  const [selected, setSelected] = useState<{ year: number; month: number; day: number }>({
+
+  // Parse initial selected date if provided (YYYY-MM-DD)
+  const initialSelected = selectedDate ? {
+    year: parseInt(selectedDate.split('-')[0]),
+    month: parseInt(selectedDate.split('-')[1]) - 1,
+    day: parseInt(selectedDate.split('-')[2])
+  } : {
     year: today.getFullYear(),
     month: today.getMonth(),
     day: today.getDate(),
-  })
+  }
+
+  const [selected, setSelected] = useState<{ year: number; month: number; day: number }>(initialSelected)
   const [viewMode, setViewMode] = useState<ViewMode>('Month')
   const [monthPickerOpen, setMonthPickerOpen] = useState(false)
 
@@ -69,6 +82,15 @@ export default function AvailabilityCalendar() {
   const stripeStyle: React.CSSProperties = {
     backgroundImage: 'repeating-linear-gradient(135deg, #f0f0f0 0px, #f0f0f0 1px, transparent 1px, transparent 8px)',
     background: '#FAFAFA',
+  }
+
+  const handleCellClick = (cell: { day: number; currentMonth: boolean }) => {
+    if (cell.currentMonth) {
+      setSelected({ year, month, day: cell.day })
+      const mStr = String(month + 1).padStart(2, '0')
+      const dStr = String(cell.day).padStart(2, '0')
+      onDateSelect?.(`${year}-${mStr}-${dStr}`)
+    }
   }
 
   return (
@@ -201,7 +223,7 @@ export default function AvailabilityCalendar() {
           return (
             <div
               key={idx}
-              onClick={() => cell.currentMonth && setSelected({ year, month, day: cell.day })}
+              onClick={() => handleCellClick(cell)}
               className="relative flex items-center justify-center p-1 sm:p-2 min-h-[48px] sm:min-h-[80px]"
               style={{
                 borderBottom: isLastRow ? 'none' : '1px solid #E8E8E9',
@@ -234,3 +256,4 @@ export default function AvailabilityCalendar() {
     </div>
   )
 }
+
