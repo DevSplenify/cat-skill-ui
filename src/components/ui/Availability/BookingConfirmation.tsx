@@ -1,4 +1,7 @@
+import { JobResponse, JobData } from '../../../types/job'
+
 interface BookingConfirmationProps {
+  response?: JobResponse
   onBack: () => void
   onAddToCalendar: () => void
 }
@@ -23,7 +26,11 @@ const LinkIcon = () => (
   </svg>
 )
 
-export default function BookingConfirmation({ onBack, onAddToCalendar }: BookingConfirmationProps) {
+export default function BookingConfirmation({ response, onBack, onAddToCalendar }: BookingConfirmationProps) {
+  const jobData = response?.data
+  const job: JobData | null = Array.isArray(jobData) ? jobData[0] : (jobData || null)
+  const userName = job?.user?.name || 'Customer'
+
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
@@ -32,7 +39,9 @@ export default function BookingConfirmation({ onBack, onAddToCalendar }: Booking
           <button onClick={onBack} className="cursor-pointer shrink-0">
             <BackIcon />
           </button>
-          <h2 className="text-xl font-semibold" style={{ color: '#171A26' }}>Heinrich's Processing Details</h2>
+          <h2 className="text-xl font-semibold" style={{ color: '#171A26' }}>
+            {userName}'s Processing Details
+          </h2>
         </div>
         <button
           className="px-5 py-3 rounded-xl text-sm font-medium text-white cursor-pointer shrink-0"
@@ -43,45 +52,68 @@ export default function BookingConfirmation({ onBack, onAddToCalendar }: Booking
         </button>
       </div>
 
-      {/* Details card */}
-      <div
-        className="p-5 rounded-2xl flex flex-col gap-4"
-        style={{ border: '1px solid #E8E8E9', background: '#F8F8FA' }}
-      >
-        <span style={{ color: '#171A26', fontFamily: 'Aeonik', fontWeight: 500, fontSize: 16, lineHeight: '24px', letterSpacing: '0.005em' }}>Details</span>
-
-        <div style={{ display: 'grid', gridTemplateColumns: '110px auto 1fr', gap: '12px', alignItems: 'center' }}>
-          {/* Row 1 */}
-          <span className="text-sm" style={{ color: '#69686D' }}>Status</span>
-          <div
-            className="flex items-center gap-1.5 px-3 py-1 rounded-full text-sm"
-            style={{ border: '1px solid #FFA07A', color: '#FA7522', background: '#FFF5EE', width: 'fit-content' }}
-          >
-            <span>Scheduled</span>
-            <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
-              <path d="M15.8346 7.5L10.0013 12.5L4.16797 7.5" stroke="#FA7522" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          <span className="text-sm font-medium" style={{ color: '#171A26' }}>Scheduled at February 09, 2026 at 3am</span>
-
-          {/* Row 2 */}
-          <span className="text-sm" style={{ color: '#69686D' }}>Item</span>
-          <div />
-          <span className="text-sm font-medium" style={{ color: '#171A26' }}>1USDA, Beef</span>
-
-          {/* Row 3 */}
-          <span className="text-sm" style={{ color: '#69686D' }}>Drop Off Date</span>
-          <div />
-          <span className="text-sm font-medium" style={{ color: '#171A26' }}>February 26, 2026</span>
-        </div>
+      {/* Success Banner */}
+      <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-medium">
+        Booking request submitted successfully!
       </div>
+
+      {/* Details card for created job */}
+      {job ? (
+        <div
+          className="p-5 rounded-2xl flex flex-col gap-4"
+          style={{ border: '1px solid #E8E8E9', background: '#F8F8FA' }}
+        >
+          <div className="flex items-center justify-between">
+            <span className="font-semibold text-base capitalize text-gray-900">
+              Job: {job.specie} ({job.numberOfAnimals} animal{job.numberOfAnimals > 1 ? 's' : ''})
+            </span>
+            <span className="text-xs text-gray-500 font-mono">ID: {job.id}</span>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '110px auto 1fr', gap: '12px', alignItems: 'center' }}>
+            {/* Row 1 */}
+            <span className="text-sm" style={{ color: '#69686D' }}>Status</span>
+            <div
+              className="flex items-center gap-1.5 px-3 py-1 rounded-full text-sm capitalize"
+              style={{ border: '1px solid #FFA07A', color: '#FA7522', background: '#FFF5EE', width: 'fit-content' }}
+            >
+              <span>{job.status || 'pending'}</span>
+            </div>
+            <span className="text-sm font-medium" style={{ color: '#171A26' }}>
+              Requested at {job.requestedDate ? new Date(job.requestedDate).toLocaleString() : new Date().toLocaleString()}
+            </span>
+
+            {/* Row 2 */}
+            <span className="text-sm" style={{ color: '#69686D' }}>Item / Level</span>
+            <div />
+            <span className="text-sm font-medium capitalize" style={{ color: '#171A26' }}>
+              {job.numberOfAnimals}x {job.inspectionLevel} {job.specie}
+            </span>
+
+            {/* Row 3 */}
+            <span className="text-sm" style={{ color: '#69686D' }}>Drop Off Date</span>
+            <div />
+            <span className="text-sm font-medium" style={{ color: '#171A26' }}>
+              {job.dropoffDate}
+            </span>
+          </div>
+        </div>
+      ) : (
+        <div
+          className="p-5 rounded-2xl flex flex-col gap-4"
+          style={{ border: '1px solid #E8E8E9', background: '#F8F8FA' }}
+        >
+          <span style={{ color: '#171A26', fontWeight: 500, fontSize: 16 }}>Details</span>
+          <span className="text-sm text-gray-500">No job returned in server response.</span>
+        </div>
+      )}
 
       {/* Processor Contact Details card */}
       <div
         className="p-5 rounded-2xl flex flex-col gap-4"
         style={{ border: '1px solid #E8E8E9', background: '#F8F8FA' }}
       >
-        <span style={{ color: '#171A26', fontFamily: 'Aeonik', fontWeight: 500, fontSize: 16, lineHeight: '24px', letterSpacing: '0.005em' }}>Processor Contact Details</span>
+        <span style={{ color: '#171A26', fontWeight: 500, fontSize: 16, lineHeight: '24px', letterSpacing: '0.005em' }}>Processor Contact Details</span>
 
         <div className="flex items-center gap-3 flex-wrap">
           {/* Name pill */}
@@ -89,7 +121,7 @@ export default function BookingConfirmation({ onBack, onAddToCalendar }: Booking
             className="px-3 py-2 rounded-xl text-sm font-medium"
             style={{ border: '1px solid #E8E8E9', color: '#171A26', background: '#fff' }}
           >
-            Nelson Weilso
+            Catskill Packing Co.
           </div>
 
           {/* Email */}
@@ -122,13 +154,13 @@ export default function BookingConfirmation({ onBack, onAddToCalendar }: Booking
 
       {/* Important Information */}
       <div className="flex flex-col gap-3">
-        <span style={{ color: '#171A26', fontFamily: 'Aeonik', fontWeight: 500, fontSize: 16, lineHeight: '24px', letterSpacing: '0.005em' }}>Important Information</span>
+        <span style={{ color: '#171A26', fontWeight: 500, fontSize: 16, lineHeight: '24px', letterSpacing: '0.005em' }}>Important Information</span>
         <ul className="flex flex-col gap-3" style={{ paddingLeft: 20, listStyleType: 'disc' }}>
           <li className="text-sm" style={{ color: '#69686D' }}>
-            If you need to cancel or edit the processing job, please contact the processor using this information listed above.
+            If you need to cancel or edit the processing job, please contact the processor using the information listed above.
           </li>
           <li className="text-sm" style={{ color: '#69686D' }}>
-            You have untill February 15, 2026 to cancel and receive a refund. If you cancel after this date, you will not be refunded your deposit.
+            You have until your scheduled dropoff date to request changes or cancellation.
           </li>
         </ul>
       </div>

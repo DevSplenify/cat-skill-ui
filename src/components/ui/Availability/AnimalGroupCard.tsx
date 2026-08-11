@@ -1,12 +1,16 @@
 import { useState } from 'react'
 import Select from '../common/Select'
+import { JobAnimal } from '../../../types/job'
 
 interface AnimalGroupCardProps {
+  group: JobAnimal
+  specieName: string
+  index: number
+  onChange: (updated: JobAnimal) => void
   onDelete: () => void
   canDelete: boolean
 }
 
-const inspectionOptions = ['Standard', 'Premium', 'Organic', 'USDA Certified']
 const sexOptions = ['Male', 'Female']
 const splitOptions = ['Whole', 'Half', 'Quarter']
 
@@ -37,33 +41,40 @@ const CheckIcon = () => (
   </svg>
 )
 
-export default function AnimalGroupCard({ onDelete, canDelete }: AnimalGroupCardProps) {
-  const [quantity, setQuantity] = useState(1)
-  const [inspection, setInspection] = useState('')
-  const [sex, setSex] = useState('')
-  const [over30, setOver30] = useState(true)
-  const [killChill, setKillChill] = useState(true)
-  const [identifier, setIdentifier] = useState('')
-  const [split, setSplit] = useState('Whole')
+export default function AnimalGroupCard({
+  group,
+  specieName,
+  index,
+  onChange,
+  onDelete,
+  canDelete,
+}: AnimalGroupCardProps) {
   const [splitOpen, setSplitOpen] = useState(false)
-  const [expanded, setExpanded] = useState(true)
-  const [specie] = useState('Beef')
+  const [expanded, setExpanded] = useState(index === 0)
+
+  const updateField = <K extends keyof JobAnimal>(field: K, value: JobAnimal[K]) => {
+    onChange({ ...group, [field]: value })
+  }
 
   return (
     <div
       className="rounded-2xl p-5 flex flex-col gap-4"
       style={{ border: '1px solid #E8E8E9'}}
     >
-      {/* Card header: specie name + delete + chevron */}
+      {/* Card header: specie name + index + delete + chevron */}
       <div className="flex items-center justify-between">
-        <span className="text-base font-semibold" style={{ color: '#171A26' }}>{specie}</span>
+        <div className="flex items-center gap-2">
+          <span className="text-base font-semibold" style={{ color: '#171A26' }}>
+            {specieName || 'Animal'} #{index + 1}
+          </span>
+        </div>
         <div className="flex items-center gap-3">
           {canDelete && (
-            <button onClick={onDelete} className="cursor-pointer">
+            <button type="button" onClick={onDelete} className="cursor-pointer" title="Delete Animal">
               <DeleteIcon />
             </button>
           )}
-          <button onClick={() => setExpanded(e => !e)} className="cursor-pointer">
+          <button type="button" onClick={() => setExpanded(e => !e)} className="cursor-pointer">
             <ChevronUpDown up={expanded} />
           </button>
         </div>
@@ -73,78 +84,60 @@ export default function AnimalGroupCard({ onDelete, canDelete }: AnimalGroupCard
         <>
           {/* Two-column: Details left, Identifiers right */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {/* Left: Beef Details card */}
+            {/* Left: Details card */}
             <div
               className="p-4 rounded-2xl flex flex-col gap-4"
               style={{ border: '1px solid #E8E8E9', background: '#F8F8FA' }}
             >
-              <span className="text-sm font-semibold" style={{ color: '#171A26' }}>{specie} Details</span>
-
-              {/* Quantity + Inspection */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {/* Quantity */}
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-medium" style={{ color: '#4B4A4D' }}>Quantity</label>
-                  <div
-                    className="flex items-center justify-between px-3 py-3 rounded-xl"
-                    style={{ border: '1px solid #E8E8E9', background: '#fff' }}
-                  >
-                    <button
-                      onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                      className="shrink-0 cursor-pointer"
-                      style={{ width: 20, height: 20, borderRadius: '50%', background: '#171A26', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, border: 'none' }}
-                    >
-                      <svg width="8" height="8" viewBox="0 0 10 2" fill="none"><path d="M1 1H9" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round"/></svg>
-                    </button>
-                    <span className="text-sm font-medium" style={{ color: '#171A26' }}>{quantity}</span>
-                    <button
-                      onClick={() => setQuantity(q => q + 1)}
-                      className="shrink-0 cursor-pointer"
-                      style={{ width: 20, height: 20, borderRadius: '50%', background: '#171A26', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, border: 'none' }}
-                    >
-                      <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><path d="M5 1V9M1 5H9" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round"/></svg>
-                    </button>
-                  </div>
-                </div>
-                <Select label="Inspection Level" value={inspection} onChange={setInspection} options={inspectionOptions} placeholder="Select Here" minWidth={0} />
-              </div>
+              <span className="text-sm font-semibold" style={{ color: '#171A26' }}>
+                {specieName} Details
+              </span>
 
               {/* Sex + Over 30 + Kill & Chill */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <Select label="Sex" value={sex} onChange={setSex} options={sexOptions} placeholder="Select here" minWidth={0} />
+                <Select
+                  label="Sex"
+                  value={group.sex}
+                  onChange={(val) => updateField('sex', val)}
+                  options={sexOptions}
+                  placeholder="Select here"
+                  minWidth={0}
+                />
 
                 {/* Over 30 months */}
                 <div className="flex flex-col gap-1.5">
                   <label className="text-sm font-medium" style={{ color: '#4B4A4D' }}>Over 30 months old?</label>
                   <div
-                    className="flex items-center justify-between px-3 py-3 rounded-xl cursor-pointer"
+                    className="flex items-center justify-between px-3 py-3 rounded-xl cursor-pointer select-none"
                     style={{ border: '1px solid #E8E8E9', background: '#fff' }}
-                    onClick={() => setOver30(o => !o)}
+                    onClick={() => updateField('isOver30Months', !group.isOver30Months)}
                   >
                     <span className="text-sm" style={{ color: '#171A26' }}>Selected</span>
                     <div
                       className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0"
-                      style={{ background: over30 ? '#171A26' : '#fff', border: over30 ? 'none' : '1.5px solid #D1D0D2' }}
+                      style={{ background: group.isOver30Months ? '#171A26' : '#fff', border: group.isOver30Months ? 'none' : '1.5px solid #D1D0D2' }}
                     >
-                      {over30 && <CheckIcon />}
+                      {group.isOver30Months && <CheckIcon />}
                     </div>
                   </div>
                 </div>
 
                 {/* Kill & Chill */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-medium" style={{ color: '#4B4A4D' }}>Beef is for kill & chill</label>
+                  <label className="text-sm font-medium" style={{ color: '#4B4A4D' }}>
+                    {specieName} is for kill & chill
+                  </label>
                   <div
-                    className="flex items-center justify-between px-3 py-3 rounded-xl cursor-pointer"
+                    className="flex items-center justify-between px-3 py-3 rounded-xl cursor-pointer select-none"
                     style={{ border: '1px solid #E8E8E9', background: '#fff' }}
-                    onClick={() => setKillChill(k => !k)}
+                    onClick={() => updateField('isKillAndChill', !group.isKillAndChill)}
                   >
                     <span className="text-sm" style={{ color: '#171A26' }}>Selected</span>
                     <div
                       className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0"
-                      style={{ background: killChill ? '#171A26' : '#fff', border: killChill ? 'none' : '1.5px solid #D1D0D2' }}
+                      style={{ background: group.isKillAndChill ? '#171A26' : '#fff', border: group.isKillAndChill ? 'none' : '1.5px solid #D1D0D2' }}
                     >
-                      {killChill && <CheckIcon />}
+                      {group.isKillAndChill && <CheckIcon />}
                     </div>
                   </div>
                 </div>
@@ -156,14 +149,16 @@ export default function AnimalGroupCard({ onDelete, canDelete }: AnimalGroupCard
               className="p-4 rounded-2xl flex flex-col gap-3"
               style={{ border: '1px solid #E8E8E9', background: '#F8F8FA' }}
             >
-              <span className="text-sm font-semibold" style={{ color: '#171A26' }}>Animal Identifiers (Ear Tags) ({quantity} animal{quantity > 1 ? 's' : ''})</span>
+              <span className="text-sm font-semibold" style={{ color: '#171A26' }}>
+                Animal Identifiers (Ear Tags) (1 animal)
+              </span>
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium" style={{ color: '#4B4A4D' }}>Identifier</label>
                 <input
                   type="text"
-                  value={identifier}
-                  onChange={(e) => setIdentifier(e.target.value)}
-                  placeholder="Write here"
+                  value={group.animalIdentifiers}
+                  onChange={(e) => updateField('animalIdentifiers', e.target.value)}
+                  placeholder="Write here e.g. A1A2A3A4"
                   className="px-3 py-3 rounded-xl text-sm outline-none w-full"
                   style={{ border: '1px solid #E8E8E9', color: '#171A26', background: '#fff' }}
                 />
@@ -183,15 +178,17 @@ export default function AnimalGroupCard({ onDelete, canDelete }: AnimalGroupCard
               <label className="text-sm font-medium" style={{ color: '#4B4A4D' }}>Split</label>
               <div className="relative">
                 <button
+                  type="button"
                   onClick={() => setSplitOpen(o => !o)}
                   className="flex items-center justify-between gap-2 w-full px-3 py-3 rounded-xl text-sm"
-                  style={{ border: '1px solid #E8E8E9', color: split ? '#171A26' : '#69686D', background: '#fff' }}
+                  style={{ border: '1px solid #E8E8E9', color: group.splitInfo ? '#171A26' : '#69686D', background: '#fff' }}
                 >
-                  <span>{split || 'Select'}</span>
+                  <span>{group.splitInfo || 'Select'}</span>
                   <div className="flex items-center gap-2">
-                    {split && (
+                    {group.splitInfo && (
                       <button
-                        onClick={(e) => { e.stopPropagation(); setSplit('') }}
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); updateField('splitInfo', '') }}
                         className="cursor-pointer"
                       >
                         <CrossIcon />
@@ -208,9 +205,10 @@ export default function AnimalGroupCard({ onDelete, canDelete }: AnimalGroupCard
                     {splitOptions.map(opt => (
                       <button
                         key={opt}
-                        onClick={() => { setSplit(opt); setSplitOpen(false) }}
-                        className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50"
-                        style={{ color: split === opt ? '#537F68' : '#171A26' }}
+                        type="button"
+                        onClick={() => { updateField('splitInfo', opt); setSplitOpen(false) }}
+                        className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 transition-colors"
+                        style={{ color: group.splitInfo === opt ? '#537F68' : '#171A26' }}
                       >
                         {opt}
                       </button>
